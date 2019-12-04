@@ -1,3 +1,6 @@
+# UNDER CONSTRUCTION!
+Do not use yet!
+
 # drlkit
 A High Level Python Deep Reinforcement Learning library. Great for beginners,  prototyping and quickly comparing algorithms
 
