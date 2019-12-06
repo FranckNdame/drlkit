@@ -3,8 +3,18 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class DQN(nn.Module):
+	"""Agent Model."""
 	
 	def __init__(self, state_size, action_size, seed, layer1_units=64, layer2_units=64):
+		"""Initialize parameters and build model.
+				Params
+				======
+					state_size (int): Dimension of each state
+					action_size (int): Dimension of each action
+					seed (int): Random seed
+					layer1_units (int): Number of nodes in first hidden layer
+					layer2_units (int): Number of nodes in second hidden layer
+		"""
 		
 		super(DQN, self).__init__()
 		self.seed = torch.manual_seed(seed)
