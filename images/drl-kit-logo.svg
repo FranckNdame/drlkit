@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="97px" height="139px" viewBox="0 0 97 139" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
+    <title>shapes</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-205.000000, -242.000000)">
+            <g id="shapes" transform="translate(205.000000, 242.000000)">
+                <path d="M36.1880518,138.247698 L0.063464939,121.17086 L0.063464939,29.6877991 L42.4223186,9.0329569 L78.3082377,26.9964299 L36.2734527,47.1712284 L36.1880518,138.247698 Z" id="Rectangle-150" fill="#347AB4"></path>
+                <polygon id="Rectangle" fill="#347AB4" points="96.4810976 18.4658769 77.0577887 27.592688 42.4223186 9.0329569 61.1841203 -1.42108547e-14"></polygon>
+                <polygon id="Rectangle-154" fill="#25669D" points="30.2099878 24.2394746 54.4638476 12.7735976 54.4638476 26.8416594 30.2099878 38.3075363"></polygon>
+                <polygon id="Rectangle-153" fill="#347AB4" points="18.1684588 18.4658769 42.2515168 7 54.4638476 12.7735976 30.2099878 24.2394746"></polygon>
+                <polygon id="Triangle-2" fill-opacity="0.864455857" fill="#1C4E78" points="96.4810976 68.8832082 96.4810976 74.2502144 89.3074207 71.8919844"></polygon>
+                <polygon id="Path-23" fill="#347AB4" points="78.1199009 83.845771 96.4810976 74.2502144 90.6738354 71.7293478 96.4810976 68.8832082 74.7892652 58.1491957"></polygon>
+                <polygon id="Rectangle" fill="#25669D" points="96.4810976 74.2502144 69.1975765 87.1798203 69.1975765 31.1798094 96.4810976 18.4658769"></polygon>
+                <polygon id="Path-22" fill="#FFCA1D" points="55.6594604 129.058733 36.1880518 138.247698 36.2734527 47.1712284 69.1975765 31.1798094 69.1975765 87.1798203 96.4810976 74.2502144 96.4810976 93.0347362 49.5959954 112.795077"></polygon>
+                <path d="M59.9295061,131.335644 L47.7171753,124.992819 L47.7171753,104.907205 L84.5249695,87.1798203 L96.4810976,93.0347362 L59.9295061,110.274211 L59.9295061,131.335644 Z" id="Rectangle-146" fill="#C59C16"></path>
+                <polygon id="Rectangle-138" fill="#FFCA1D" points="59.9295061 110.274211 96.4810976 93.0347362 96.4810976 114.340125 59.9295061 131.335644"></polygon>
+                <polygon id="Rectangle-148" fill="#FFFFFF" points="47.7171753 55.0591012 54.3784466 52.1316433 54.3784466 59.3689699 47.7171753 62.2151095"></polygon>
+                <polygon id="Rectangle-152" fill="#3786C7" points="18.1684588 18.4658769 30.2099878 24.2394746 30.2099878 38.3075363 18.1684588 32.615257"></polygon>
+                <polygon id="Rectangle-148" fill="#FFFFFF" points="86 66.9274579 92.6612713 64 92.6612713 71.2373266 86 74.0834662"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
