@@ -1,4 +1,4 @@
-from skimage import transform # Preprocess the frames
+from skimage import transform # Preprocess the frames || scikit-image
 from skimage.color import rgb2gray # Grayscale the frames
 from collections import deque
 
@@ -19,7 +19,7 @@ def preprocess_frame(frame, crop, new_size):
     resized_frame = transform.resize(normalized_frame, new_size)
     return resized_frame
 
-def initialize_stack_frame(width, height, max_len=4):
+def initialize_stack_frame(width=110, height=84, max_len=4):
     return  deque([np.zeros((width, height), dtype=np.int) for _ in range(stack_size)], maxlen=max_len)
 
 def stack_frames(stacked_frames, state, is_new_episode, stack_size=4, state_w=110, state_h=84):
