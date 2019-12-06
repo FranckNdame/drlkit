@@ -1,10 +1,11 @@
 from collections import deque, namedtuple
 import numpy as np
 import random
+import torch
 
 class Memory(object):
     """Replay memory buffer to store experience tuples."""
-    def __init__(self, action_size, buffer_size=1_000_000, batch_size=64, seed):
+    def __init__(self, action_size, seed, buffer_size=1_000_000, batch_size=64):
         """Initialize a ReplayBuffer object.
         
         Params
