@@ -1,80 +1,87 @@
-print("hello")
-#import sys
-#import gym
-#from dqn import DQNAgent
-#from collections import deque
-#import numpy as np
+import gym
+import random
+import torch
+import numpy as np
+from collections import deque
+import matplotlib.pyplot as plt
+
+from agents.TorchAgent import TorchAgent
+#  pip3 install box2d-py
+env = gym.make('LunarLander-v2')
+env.seed(0)
+print('State shape: ', env.observation_space.shape)
+print('Number of actions: ', env.action_space.n)
+
+agent = TorchAgent(state_size=8, action_size=env.action_space.n, seed=0)
+state = env.reset()
+done = False
+print_info = False
+
+def play(n_episodes, time_steps=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.995):
+	"""Train agent
+	
+	Params
+	======
+		n_episodes (int): maximum number of training episodes
+		time_steps (int): maximum number of timesteps per episode
+		eps_start (float): starting value of epsilon
+		eps_end (float): minimum value of epsilon
+		eps_decay (float): decay rate of epsilon		
+	"""
+	
+	scores = []
+	scores_window = deque(maxlen=100)
+	eps = eps_start
+	for i_episode in range(1, n_episodes+1):
+		state = env.reset()
+		score = 0
+		for t in range(time_steps):
+			action = agent.act(state, eps)
+			next_state, reward, done, info = env.step(action)
+			if print_info:
+				print(info)
+			agent.step(state, action, reward, next_state, done)
+			state = next_state
+			score += reward
+			if done:
+				break
+		scores_window.append(score) # push recent score
+		scores.append(score) # save recent score
+		eps = max(eps_end, eps_decay*eps) # decrease exploration rate
+		
+		print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)), end="")
+		if not i_episode % 100:
+			print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)))
+		if np.mean(scores_window)>=200.0:
+				print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_window)))
+				torch.save(agent.target_network.state_dict(), 'checkpoint.pth')
+				break
+	return scores
+	
+#scores = play(1200)
 #
-#
-#env     = gym.make("MountainCar-v0")
-#episodes  = 1000
-#steps = 500
-#print(env.observation_space)
-#
-#agent = DQNAgent(env.observation_space, env.action_space.n, eps_start=1.0, load=False)
-#
-#scores = []
-#scores_buffer = deque(maxlen=100)
-#avg_scores = []
-#num_episodes = 2000
-#for ep in range(num_episodes):
-#    state = env.reset()
-#    total_reward = 0
-#    done = False
-#    for step in range(steps):
-#        action = agent.get_action(state)
-#        next_state, reward, done, info = env.step(action)
-#        agent.play(state, action, reward, next_state, done)
-#        total_reward += reward  
-#        state = next_state 
-#        if done:
-#            break
-#
-#    scores.append(total_reward)
-#    scores_buffer.append(total_reward)
-#    avg_scores.append(np.mean(scores_buffer))
-#    if avg_scores[-1] >= np.max(avg_scores): agent.Q_network.save_model()
-#    print("Episode: {}, Score: {}, Avg reward: {:.2f}".format(ep, scores[-1], avg_scores[-1]))
+## plot the scores
+#fig = plt.figure()
+#ax = fig.add_subplot(111)
+#plt.plot(np.arange(len(scores)), scores)
+#plt.ylabel('Score')
+#plt.xlabel('Episode #')
+#plt.show()
 
 
+#### WATCH TRAINED AGENT
 
 
+#load the weights from file
+agent.target_network.load_state_dict(torch.load('checkpoint.pth'))
 
-
-
-
-
-
-
-
-
-
-
-
-# updateTargetNetwork = 1000
-#dqn_agent = DQN(env=env)
-#for episode in range(episodes):
-#    cur_state = env.reset().reshape(1,2)
-#    for step in range(steps):
-#        action = dqn_agent.act(cur_state)
-#        new_state, reward, done, _ = env.step(action)
-#
-#        # reward = reward if not done else -20
-#        new_state = new_state.reshape(1,2)
-#        dqn_agent.remember(cur_state, action, reward, new_state, done)
-#
-#        dqn_agent.replay()       # internally iterates default (prediction) model
-#        dqn_agent.target_train() # iterates target model
-#        env.render()
-#
-#        cur_state = new_state
-#        if done:
-#            break
-#    if step >= 199:
-#        print("Failed to complete in episode {}".format(episode))
-#        if step % 10 == 0:
-#            dqn_agent.save_model("episode-{}.model".format(episode))
-#    else:
-#        print("Completed in {} episodes".format(episode))
-#        dqn_agent.save_model("success.model")
-#        break
+for i in range(10):
+	state = env.reset()
+	for j in range(200):
+		action = agent.act(state)
+		env.render()
+		state, reward, done, _ = env.step(action)
+		if done:
+			break 
+			
+env.close()

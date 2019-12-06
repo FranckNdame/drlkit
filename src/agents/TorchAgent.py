@@ -1,12 +1,16 @@
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
+import numpy as np
+
 
 import sys
+import random
 sys.path.append("..")
 from models.pytorch.DQN import DQN
 from utils.memory import Memory
 from utils import preprocess as pr
+
 
 # Check if GPU is available
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -14,7 +18,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class TorchAgent(object):
 	def __init__(
 		self, state_size, action_size, seed,
-		buffer_size = 1_000_000, batch_size=64, gamma=0.9,
+		buffer_size = 1_000_000, batch_size=64, gamma=0.99,
 		tau=1e-3, lr=5e-4, update_every=4
 	):
 		"""
@@ -39,7 +43,7 @@ class TorchAgent(object):
 		# Params
 		self.state_size = state_size
 		self.action_size = action_size
-		self.seed = seed
+		self.seed = random.seed(seed)
 		
 		# Hyperparameters
 		self.gamma = gamma
@@ -55,7 +59,7 @@ class TorchAgent(object):
 		self.optimizer = optim.Adam(self.policy_network.parameters(), lr=lr)
 		
 		# Experience replay
-		self.memory = Memory(action_size, buffer_size, batch_size, seed)
+		self.memory = Memory(action_size, seed, buffer_size, batch_size)
 		
 		self.time_step = 0
 		
@@ -65,13 +69,13 @@ class TorchAgent(object):
 		self.memory.save(state, action, reward, next_state, done)
 		
 		# learn i.e update weights at self.update_every
-		if not (self.time_step+1) % self.update_every:
+		self.time_step = (self.time_step + 1) % self.update_every
+		if not self.time_step:
 			# If the memory can provide sample
-			if self.memory.can_provide():
+			if self.memory.can_provide:
 				experience = self.memory.sample()
 				self.learn(experience, self.gamma)
 				
-		pass
 		
 	def act(self, state, eps=0.):
 		"""Returns an action for the given state following the current policy
@@ -95,7 +99,7 @@ class TorchAgent(object):
 			return np.argmax(action_values.cpu().data.numpy())
 		else:
 			# select stochastic action
-			return random.choice(np.arrange(self.action_size))
+			return random.choice(np.arange(self.action_size))
 			
 		
 	def learn(self, experiences, gamma):

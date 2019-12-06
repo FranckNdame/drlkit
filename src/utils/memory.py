@@ -3,9 +3,12 @@ import numpy as np
 import random
 import torch
 
+# Check if GPU is available
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 class Memory(object):
     """Replay memory buffer to store experience tuples."""
-    def __init__(self, action_size, seed, buffer_size=1_000_000, batch_size=64):
+    def __init__(self, action_size, seed, buffer_size=1000000, batch_size=64):
         """Initialize a ReplayBuffer object.
         
         Params
@@ -20,7 +23,7 @@ class Memory(object):
         self.batch_size = batch_size
         self.seed = seed
         
-        self.experience = namedtuple("Experience", field_names=["states", "actions", "reward", "next_state", "done"])
+        self.experience = namedtuple("Experience", field_names=["state", "action", "reward", "next_state", "done"])
 
     def save(self, state, action, reward, next_state, done):
         """Save new experience to buffer"""
@@ -29,14 +32,14 @@ class Memory(object):
     
     def sample(self):
         """Sample a batch of random experiences from memory"""
-        samples = random.sample(self.buffer, k=self.batch_size)
+        experiences = random.sample(self.buffer, k=self.batch_size)
+
+        states = torch.from_numpy(np.vstack([e.state for e in experiences if e is not None])).float().to(device)
+        actions = torch.from_numpy(np.vstack([e.action for e in experiences if e is not None])).long().to(device)
+        rewards = torch.from_numpy(np.vstack([e.reward for e in experiences if e is not None])).float().to(device)
+        next_states = torch.from_numpy(np.vstack([e.next_state for e in experiences if e is not None])).float().to(device)
+        dones = torch.from_numpy(np.vstack([e.done for e in experiences if e is not None]).astype(np.uint8)).float().to(device)
         
-        states = torch.from_numpy(np.vstack([sample.state for sample in samples if sample is not None])).float().to(device)
-        actions = torch.from_numpy(np.vstack([sample.action for sample in samples if sample is not None])).long().to(device)
-        rewards = torch.from_numpy(np.vstack([sample.reward for sample in samples if sample is not None])).float().to(device)
-        next_states = torch.from_numpy(np.vstack([sample.next_state for sample in samples if sample is not None])).float().to(device)
-        dones = torch.from_numpy(np.vstack([sample.done for sample in samples if sample is not None]).astype(np.uint8)).float().to(device)
-          
         return (states, actions, rewards, next_states, dones)
         
         
