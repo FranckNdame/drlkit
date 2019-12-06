@@ -1,4 +1,5 @@
 from setuptools import setup
+from setuptools import find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -7,7 +8,8 @@ setup(
     name='drlkit',
     version='0.0.1',
     description='A High Level Python Deep Reinforcement Learning library. Great for beginners, for prototyping and quickly comparing algorithms',
-    py_modules=['drlkit', 'pydrl'],
+    license='MIT',
+    py_modules=['drlkit'],
     package_dir={'':'src'},
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -20,4 +22,5 @@ setup(
     url="https://github.com/FranckNdame/drlkit",
     author="Franck Ndame",
     author_email="franck.mpouli@gmail.com",
+    packages=find_packages(),
 )
