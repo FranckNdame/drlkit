@@ -1,4 +1,5 @@
 ![](images/drl-kit-banner.png)
+
 --------------------------------------------------------------------------------
 
 A High Level Python Deep Reinforcement Learning library. Great for beginners,  prototyping and quickly comparing algorithms
