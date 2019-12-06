@@ -1,4 +1,6 @@
-![](images/drl-kit-banner.png)
+<p align="center">
+ <img src="images/drl-kit-banner.png" width=75% alt="Gitter">
+</p>
 
 --------------------------------------------------------------------------------
 <p align="center">
