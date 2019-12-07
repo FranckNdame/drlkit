@@ -1,12 +1,15 @@
+from __future__ import absolute_import
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
 
 
-#import sys
+import sys
+import os
 import random
-#sys.path.append("..")
+sys.path.append("..")
+
 from drlkit.utils.memory import Memory
 from drlkit.utils import preprocess as pr
 from drlkit.networks.pytorch.DQN import DQN

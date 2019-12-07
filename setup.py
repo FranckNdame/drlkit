@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='drlkit',
-    version='0.0.8',
+    version='0.0.9',
     description='A High Level Python Deep Reinforcement Learning library. Great for beginners, for prototyping and quickly comparing algorithms',
     install_requires=[
             'torch',

@@ -80,13 +80,13 @@ class EnvironmentWrapper(object):
 		print("Model saved!")
 			
 	def list_models(self, env_name):
-		path = f"../models/{}"
+		path = f"./models/{env_name}"
 		if not os.path.exists(path):
 			print(f"No model saved for {env_name}")
 		else:
 			lst = os.listdir(path)
 			print(f"Models for {env_name}")
-			print("==================")
+			print("===========================")
 			i = 1
 			for item in lst:
 				if item != "__init__.py":
@@ -97,6 +97,7 @@ class EnvironmentWrapper(object):
 	def load_model(self, agent, env_name, elapsed_episodes):
 		self.agent = agent
 		agent.target_network.load_state_dict(torch.load(f'models/{env_name}/episode-{elapsed_episodes}'))
+		print("Model Loaded!")
 		
 		
 	def play(self, num_episodes=10, max_ts=200, trained=True):
