@@ -4,7 +4,6 @@ from collections import deque
 import sys
 import torch
 import numpy as np
-sys.path.append("..")
 
 
 class EnvironmentWrapper(object):
@@ -57,9 +56,9 @@ class EnvironmentWrapper(object):
 		print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)), end="")
 		if not episode % 100:
 			print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
-		if np.mean(self.scores_window)>=-100.0:
+		if np.mean(self.scores_window)>=200.0:
 				print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
-				filename = f'episode-{episode}[score={round(np.mean(self.scores_window))}].pth'
+				filename = f'episode-{episode}.pth'
 				self.save_model(f"models/{self.env_name}/", filename, self.agent.target_network.state_dict())
 				return True
 		
@@ -80,12 +79,24 @@ class EnvironmentWrapper(object):
 		torch.save(file, dir+filename)
 		print("Model saved!")
 			
-	def list_models(self, dir=""):
-		pass
+	def list_models(self, env_name):
+		path = f"../models/{}"
+		if not os.path.exists(path):
+			print(f"No model saved for {env_name}")
+		else:
+			lst = os.listdir(path)
+			print(f"Models for {env_name}")
+			print("==================")
+			i = 1
+			for item in lst:
+				if item != "__init__.py":
+					print(f"{i} - {item}") 
+					i += 1
 		
-	def load_model(self, agent, env, elapsed_episodes):
+		
+	def load_model(self, agent, env_name, elapsed_episodes):
 		self.agent = agent
-		agent.target_network.load_state_dict(torch.load('models/LunarLander-v2/episode-254-avg_score--80.0.pth'))
+		agent.target_network.load_state_dict(torch.load(f'models/{env_name}/episode-{elapsed_episodes}'))
 		
 		
 	def play(self, num_episodes=10, max_ts=200, trained=True):

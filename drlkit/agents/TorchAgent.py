@@ -4,12 +4,13 @@ import torch.optim as optim
 import numpy as np
 
 
-import sys
+#import sys
 import random
-sys.path.append("..")
-from networks.pytorch.DQN import DQN
-from utils.memory import Memory
-from utils import preprocess as pr
+#sys.path.append("..")
+from drlkit.utils.memory import Memory
+from drlkit.utils import preprocess as pr
+from drlkit.networks.pytorch.DQN import DQN
+
 
 
 # Check if GPU is available
