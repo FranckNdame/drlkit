@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://i.ibb.co/W59k4r6/drl-kit-banner.png" width=70% alt="Gitter">
+ <img src="https://github.com/FranckNdame/drlkit/blob/master/images/drl-kit-banner.png" width=70% alt="Gitter">
 </p>
 
 --------------------------------------------------------------------------------
@@ -8,7 +8,7 @@
       <img src="https://img.shields.io/badge/python-3.6+-blue.svg" alt="Gitter">
    </a>
    <a>
-      <img src="images/torchbadge.svg" alt="Pytorch">
+      <img src="https://github.com/FranckNdame/drlkit/blob/master/images/torchbadge.svg" alt="Pytorch">
    </a>
    <a>
       <img src="https://camo.githubusercontent.com/7ce7d8e78ad8ddab3bea83bb9b98128528bae110/68747470733a2f2f616c65656e34322e6769746875622e696f2f6261646765732f7372632f74656e736f72666c6f772e737667" alt="Gitter">
@@ -24,7 +24,7 @@
 A High Level Python Deep Reinforcement Learning library. Great for beginners,  prototyping and quickly comparing algorithms
 <br><br>
 <p align="center">
- <img src="https://i.ibb.co/QYDKTrv/environments.gif" width=90% alt="Environments">
+ <img src="https://github.com/FranckNdame/drlkit/blob/master/images/environments.gif" alt="Environments">
 </p>
 
 # UNDER CONSTRUCTION!
