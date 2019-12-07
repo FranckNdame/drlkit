@@ -6,6 +6,7 @@ from collections import deque
 import matplotlib.pyplot as plt
 
 from agents.TorchAgent import TorchAgent
+from utils.plot import Plot
 #  pip3 install box2d-py
 env = gym.make('LunarLander-v2')
 env.seed(0)
@@ -59,14 +60,8 @@ def play(n_episodes, time_steps=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.9
 	return scores
 	
 #scores = play(1200)
-#
-## plot the scores
-#fig = plt.figure()
-#ax = fig.add_subplot(111)
-#plt.plot(np.arange(len(scores)), scores)
-#plt.ylabel('Score')
-#plt.xlabel('Episode #')
-#plt.show()
+Plot.simple_plot(np.arange(len(scores)), scores, xlabel='Score', ylabel='Episode #')
+
 
 
 #### WATCH TRAINED AGENT
@@ -74,7 +69,18 @@ def play(n_episodes, time_steps=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.9
 
 #load the weights from file
 agent.target_network.load_state_dict(torch.load('checkpoint.pth'))
+print("Dumb agent")
+for i in range(10):
+	state = env.reset()
+	for j in range(200):
+		env.render()
+		state, reward, done, _ = env.step(env.action_space.sample())
+		if done:
+			break 
+			
+env.close()
 
+print("Smart agent")
 for i in range(10):
 	state = env.reset()
 	for j in range(200):
