@@ -7,7 +7,7 @@ import numpy as np
 import sys
 import random
 sys.path.append("..")
-from models.pytorch.DQN import DQN
+from networks.pytorch.DQN import DQN
 from utils.memory import Memory
 from utils import preprocess as pr
 

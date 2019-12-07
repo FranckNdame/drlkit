@@ -2,11 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class Plot(object):
-	def __init__(self):
-		pass
 		
-	@static
-	def basic_plot(self, x, y, xlabel="x-axis", ylabel="y-axis"):
+	@staticmethod
+	def basic_plot(x, y, xlabel="x-axis", ylabel="y-axis"):
 		"""Generate a basic plot
 		
 		Params
@@ -19,7 +17,7 @@ class Plot(object):
 		# plot the scores
 		fig = plt.figure()
 		ax = fig.add_subplot(111)
-		plt.plot(np.arange(x, y)
+		plt.plot(x, y)
 		plt.ylabel(ylabel)
 		plt.xlabel(xlabel)
 		plt.show()

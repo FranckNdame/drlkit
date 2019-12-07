@@ -4,11 +4,13 @@ import torch
 import numpy as np
 from collections import deque
 import matplotlib.pyplot as plt
+import os
 
 from agents.TorchAgent import TorchAgent
 from utils.plot import Plot
 #  pip3 install box2d-py
-env = gym.make('LunarLander-v2')
+ENV_NAME = "LunarLander-v2"
+env = gym.make(ENV_NAME)
 env.seed(0)
 print('State shape: ', env.observation_space.shape)
 print('Number of actions: ', env.action_space.n)
@@ -53,41 +55,58 @@ def play(n_episodes, time_steps=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.9
 		print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)), end="")
 		if not i_episode % 100:
 			print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)))
-		if np.mean(scores_window)>=200.0:
-				print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_window)))
-				torch.save(agent.target_network.state_dict(), 'checkpoint.pth')
+		if np.mean(scores_window)>=-80.0:
+				print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)))
+				filename = f'episode-{i_episode}-avg_score-{round(np.mean(scores_window))}.pth'
+				saveModel(f"models/{ENV_NAME}/", filename, agent.target_network.state_dict())
 				break
 	return scores
 	
-#scores = play(1200)
-Plot.simple_plot(np.arange(len(scores)), scores, xlabel='Score', ylabel='Episode #')
+def saveModel(dir, filename, file):
+	"""Save model
+		
+		Params
+		======
+			dir (string): directory
+			filename (string): filename
+			file (dictionary): model parameters		
+		"""
+	if not os.path.exists(dir):
+		os.makedirs(dir)
+		print("Directory created")
+	torch.save(file, dir+filename)
+	print("Model saved!")
+	
+	
+scores = play(500)
+Plot.basic_plot(np.arange(len(scores)), scores, xlabel='Episode #', ylabel='Score')
 
 
 
-#### WATCH TRAINED AGENT
-
-
-#load the weights from file
-agent.target_network.load_state_dict(torch.load('checkpoint.pth'))
-print("Dumb agent")
-for i in range(10):
-	state = env.reset()
-	for j in range(200):
-		env.render()
-		state, reward, done, _ = env.step(env.action_space.sample())
-		if done:
-			break 
-			
-env.close()
-
-print("Smart agent")
-for i in range(10):
-	state = env.reset()
-	for j in range(200):
-		action = agent.act(state)
-		env.render()
-		state, reward, done, _ = env.step(action)
-		if done:
-			break 
-			
-env.close()
+##### WATCH TRAINED AGENT
+#
+#
+##load the weights from file
+#agent.target_network.load_state_dict(torch.load('models/checkpoint.pth'))
+#print("Dumb agent")
+#for i in range(10):
+#	state = env.reset()
+#	for j in range(200):
+#		env.render()
+#		state, reward, done, _ = env.step(env.action_space.sample())
+#		if done:
+#			break 
+#			
+#env.close()
+#
+#print("Smart agent")
+#for i in range(10):
+#	state = env.reset()
+#	for j in range(200):
+#		action = agent.act(state)
+#		env.render()
+#		state, reward, done, _ = env.step(action)
+#		if done:
+#			break 
+#			
+#env.close()
