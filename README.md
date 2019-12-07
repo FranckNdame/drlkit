@@ -24,7 +24,7 @@
 A High Level Python Deep Reinforcement Learning library. Great for beginners,  prototyping and quickly comparing algorithms
 <br><br>
 <p align="center">
- <img src="https://github.com/FranckNdame/drlkit/blob/master/images/environments.gif" alt="Environments">
+ <img src="https://github.com/FranckNdame/drlkit/blob/master/images/environments.gif" width=95% alt="Environments">
 </p>
 
 # UNDER CONSTRUCTION!
