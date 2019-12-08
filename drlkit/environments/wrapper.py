@@ -4,7 +4,9 @@ from collections import deque
 import sys
 import torch
 import numpy as np
-
+sys.path.append("..")
+from drlkit import models
+from drlkit.utils.exceptions import AgentMissing
 
 class EnvironmentWrapper(object):
 	def __init__(
@@ -16,6 +18,7 @@ class EnvironmentWrapper(object):
 		env = gym.make(name)
 		env.seed(seed)
 		self.env = env
+		self.agent = None
 		
 		self.scores = []
 		self.scores_window = deque(maxlen=100)
@@ -28,6 +31,7 @@ class EnvironmentWrapper(object):
 		self.print_info = print_info
 		
 		self.done = False
+		self.best_score = 0
 		
 		
 	def fit(self, agent, n_episodes):
@@ -49,22 +53,25 @@ class EnvironmentWrapper(object):
 			self.scores_window.append(score) # push recent score
 			self.scores.append(score) # save recent score
 			self.eps = max(self.eps_min, self.eps*self.eps_decay) # decrease exploration rate
-			if self.monitor_progress(i_episode):
-				break
+			self.monitor_progress(i_episode)
+		print("==== Training complete! =====")
+		print(f"# Episodes: {n_episodes} || score: {np.mean(self.scores_window)}")
 			
 	def monitor_progress(self, episode):
 		print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)), end="")
 		if not episode % 100:
 			print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
 		if np.mean(self.scores_window)>=200.0:
-				print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
-				filename = f'episode-{episode}.pth'
-				self.save_model(f"models/{self.env_name}/", filename, self.agent.target_network.state_dict())
-				return True
+				if np.mean(self.scores_window) > self.best_score:
+					print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
+					filename = f'{self.env_name}-{episode}.pth'
+					self.best_score = np.mean(self.scores_window)
+					self.save_model(filename, self.agent.target_network.state_dict())
+			
 		
 				
 		
-	def save_model(self, dir, filename, file):
+	def save_model(self, filename, file):
 		"""Save model
 				
 		Params
@@ -73,19 +80,21 @@ class EnvironmentWrapper(object):
 			filename (string): filename
 			file (dictionary): model parameters		
 		"""
-		if not os.path.exists(dir):
-			os.makedirs(dir)
-			print("Directory created")
-		torch.save(file, dir+filename)
-		print("Model saved!")
-			
-	def list_models(self, env_name):
-		path = f"./models/{env_name}"
+
+		path = "./models/"
 		if not os.path.exists(path):
-			print(f"No model saved for {env_name}")
+			os.makedirs(path)
+			print("Directory created")
+		torch.save(file, path+filename)
+		print(f"Model saved! @ {path+filename}")
+			
+	def list_models(self):
+		path = path = "./models/"
+		if not os.path.exists(path):
+			print(f"No model found!")
 		else:
 			lst = os.listdir(path)
-			print(f"Models for {env_name}")
+			print(f"Models Available")
 			print("===========================")
 			i = 1
 			for item in lst:
@@ -96,11 +105,34 @@ class EnvironmentWrapper(object):
 		
 	def load_model(self, agent, env_name, elapsed_episodes):
 		self.agent = agent
-		agent.target_network.load_state_dict(torch.load(f'models/{env_name}/episode-{elapsed_episodes}'))
+		path = os.path.dirname(models.__file__)
+		path += f"/{env_name}/episode-{elapsed_episodes}.pth"
+		if not os.path.exists(path):
+			print(f"No such model saved! @ {path}")
+			return
+		if torch.cuda.is_available():	
+			self.agent.target_network.load_state_dict(torch.load(path))
+		else:
+			self.agent.target_network.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
 		print("Model Loaded!")
+		
+	def load_prebuilt_model(self, agent, path):
+			self.agent = agent
+			if not os.path.exists(path):
+				print(f"No such model saved!  @ {path}")
+				return
+			if torch.cuda.is_available():	
+				self.agent.policy_network.load_state_dict(torch.load(path))
+			else:
+				self.agent.policy_network.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
+				
+				
+			print("Model Loaded!")
 		
 		
 	def play(self, num_episodes=10, max_ts=200, trained=True):
+		if not self.agent:
+			raise AgentMissing()
 		for i in range(1,num_episodes+1):
 			state = self.env.reset()
 			for ts in range(max_ts):
