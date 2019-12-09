@@ -10,7 +10,7 @@ from drlkit.utils.exceptions import AgentMissing
 
 class EnvironmentWrapper(object):
 	def __init__(
-		self, name, max_ts=1_000, 
+		self, name, max_ts=2_500, 
 		eps_start=1.0, eps_min =0.01, eps_decay=0.995,
 		seed=0, print_info=False
 	):
