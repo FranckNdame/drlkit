@@ -24,19 +24,22 @@ class EnvironmentWrapper(object):
 		self.scores_window = deque(maxlen=100)
 		self.eps = eps_start
 		
-		
 		self.max_ts = max_ts
 		self.eps_min = eps_min
 		self.eps_decay = eps_decay
+		
 		self.print_info = print_info
 		
 		self.done = False
 		self.best_score = 0
 		
 		
-	def fit(self, agent, n_episodes):
+	def fit(self, agent, n_episodes, save_every=None):
 		self.agent = agent
 		self.n_episodes = n_episodes
+		if not save_every:
+			save_every = n_episodes//3
+		self.save_every = save_every
 		for i_episode in range(1, n_episodes+1):
 			state = self.env.reset()
 			score = 0
@@ -61,12 +64,11 @@ class EnvironmentWrapper(object):
 		print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)), end="")
 		if not episode % 100:
 			print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
-		if np.mean(self.scores_window)>=200.0:
-				if np.mean(self.scores_window) > self.best_score:
-					print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
-					filename = f'{self.env_name}-{episode}.pth'
-					self.best_score = np.mean(self.scores_window)
-					self.save_model(filename, self.agent.target_network.state_dict())
+		if (not episode % self.save_every) or episode == self.n_episodes:
+			print('\nSaving agent @ {:d} episodes!\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
+			filename = f'{self.env_name}-{episode}.pth'
+			self.best_score = np.mean(self.scores_window)
+			self.save_model(filename, self.agent.target_network.state_dict())
 			
 		
 				
