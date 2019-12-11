@@ -27,9 +27,6 @@ A High Level Python Deep Reinforcement Learning library. Great for beginners,  p
  <img src="images/environments.gif" width=95% alt="Environments">
 </p>
 
-# UNDER CONSTRUCTION!
-Do not use yet!
-
 | System | 3.5 | 3.6 | 3.7 |
 | :---: | :---: | :---: | :--: |
 | Linux CPU | [![Build Status](https://ci.pytorch.org/jenkins/job/pytorch-master/badge/icon)](https://ci.pytorch.org/jenkins/job/pytorch-master/) | [![Build Status](https://ci.pytorch.org/jenkins/job/pytorch-master/badge/icon)](https://ci.pytorch.org/jenkins/job/pytorch-master/) | <center>—</center> |
@@ -51,7 +48,9 @@ pip install drlkit
 
 ```python
 import numpy as np
-from drlkit import TorchAgent, Plot, EnvironmentWrapper
+from agents.TorchAgent import TorchAgent
+from utils.plot import Plot
+from environments.wrapper import EnvironmentWrapper
 
 ENV_NAME = "LunarLander-v2"
 env = EnvironmentWrapper(ENV_NAME)
@@ -63,11 +62,40 @@ env.fit(agent, n_episodes=1000)
 # See the results
 Plot.basic_plot(np.arange(len(env.scores)), env.scores, xlabel='Episode #', ylabel='Score')
 
-
-# Play untrained agent
-env.load_model(agent, env="LunarLander", elapsed_episodes=3000)
-env.play(num_episodes=10, trained=False)
-
 # Play trained agent
 env.play(num_episodes=10, trained=True)
 ```
+It is as simple as that! 🤯
+
+### Loading a model
+```python
+ENV_NAME = "LunarLander-v2"
+env = EnvironmentWrapper(ENV_NAME)
+agent = TorchAgent(state_size=8, action_size=env.env.action_space.n, seed=0)
+
+env.load_model(agent, "./models/LunarLander-v2-4477.pth")
+env.play(num_episodes=10)
+```
+
+### Play untrained agent
+```python
+env.play(num_episodes=10, trained=False)
+```
+<br>
+<p align="center">
+ <img src="images/Untrained-Agent.gif" width=50% alt="Environments">
+</p>
+
+
+### Play trained agent (4477 episodes, 3 hours)
+```python
+env.play(num_episodes=10, trained=True)
+```
+<br>
+<p align="center">
+ <img src="images/Trained-Agent.gif" width=50% alt="Environments">
+</p>
+
+## Tested Environments
+
+## Algorithms
