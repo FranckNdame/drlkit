@@ -23,10 +23,9 @@
   </p>
 
 <br/>
-<p align="center">
- A High Level Python Deep Reinforcement Learning library.<br> 
+ <h3 align="center">A High Level Python Deep Reinforcement Learning library.<br> 
  Great for beginners,  prototyping and quickly comparing algorithms
-</p>
+</h3>
 
 <br/>
 <p align="center">
@@ -34,7 +33,7 @@
 </p>
 
 
-## Installation
+## Installation 📦
 
 Install drlkit via pip
 
@@ -71,7 +70,10 @@ Plot.basic_plot(np.arange(len(env.scores)), env.scores, xlabel='Episode #', ylab
 # Play trained agent
 env.play(num_episodes=10, trained=True)
 ```
-It is as simple as that! 🤯
+# It is as simple as that! 🤯
+
+--------------------------------------------------------------------------------
+<br/>
 
 ### Loading a model 🗃
 ```python
@@ -130,7 +132,7 @@ env.play(num_episodes=10, trained=True)
 
 * [x] Implement DQN
 * [x] Test DQN
-* [-] Finish DDPG
+* [ ] Finish DDPG
 * [ ] Implement PP01
 * [ ] Improve documentation
 
@@ -143,16 +145,16 @@ This is an open source project, so feel free to contribute. How?
 - Propose your own fixes, suggestions and open a pull request with the changes.
 
 
-## 🤖‍ Author
+## ✍🏾 Author
 
 * Franck Ndame
 
-## 👮🏻 License
+## 🚨 License
 
 ```
 MIT License
 
-Copyright (c) 2017 Juanpe Catalán
+Copyright (c) 2019 Franck Ndame
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
