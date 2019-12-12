@@ -21,7 +21,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class TorchAgent(object):
 	def __init__(
-		self, state_size, action_size, seed,
+		self, state_size, action_size, seed=0,
 		buffer_size = 1_000_000, batch_size=64, gamma=0.99,
 		tau=1e-3, lr=5e-4, update_every=4
 	):

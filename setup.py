@@ -16,6 +16,7 @@ setup(
             'box2d-py',
             'gym',
             'keras',
+            'scikit-image',
         ],
     license='MIT',
     py_modules=['drlkit'],

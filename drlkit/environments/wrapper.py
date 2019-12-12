@@ -16,6 +16,7 @@ class EnvironmentWrapper(object):
 	):
 		self.env_name = name
 		env = gym.make(name)
+		
 		env.seed(seed)
 		self.env = env
 		self.agent = None
@@ -105,20 +106,8 @@ class EnvironmentWrapper(object):
 					i += 1
 		
 		
-	def load_model(self, agent, env_name, elapsed_episodes):
-		self.agent = agent
-		path = os.path.dirname(models.__file__)
-		path += f"/{env_name}/episode-{elapsed_episodes}.pth"
-		if not os.path.exists(path):
-			print(f"No such model saved! @ {path}")
-			return
-		if torch.cuda.is_available():	
-			self.agent.target_network.load_state_dict(torch.load(path))
-		else:
-			self.agent.target_network.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
-		print("Model Loaded!")
 		
-	def load_prebuilt_model(self, agent, path):
+	def load_model(self, agent, path):
 			self.agent = agent
 			if not os.path.exists(path):
 				print(f"No such model saved!  @ {path}")
@@ -132,7 +121,7 @@ class EnvironmentWrapper(object):
 			print("Model Loaded!")
 		
 		
-	def play(self, num_episodes=10, max_ts=200, trained=True):
+	def play(self, n_episodes=10, max_ts=200, trained=True):
 		if not self.agent:
 			raise AgentMissing()
 		for i in range(1,num_episodes+1):
