@@ -12,7 +12,7 @@ class Memory(object):
         """Initialize a ReplayBuffer object.
         
         Params
-        ======
+        =====1``````````=
             action_size (int): size of each action
             buffer_size (int): size of memory buffer
             batch_size (int): size of each training minibatch

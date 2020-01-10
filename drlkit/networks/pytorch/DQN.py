@@ -22,7 +22,7 @@ class DQN(nn.Module):
 		self.fc2 = nn.Linear(layer1_units, layer2_units)
 		self.fc3 = nn.Linear(layer2_units, action_size)
 		
-	def forward(self, state):
-		x = F.relu(self.fc1(state))
+	def forward(self, x):
+		x = F.relu(self.fc1(x))
 		x = F.relu(self.fc2(x))
 		return self.fc3(x)

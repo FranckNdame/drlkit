@@ -14,21 +14,23 @@ class EnvironmentWrapper(object):
 		eps_start=1.0, eps_min =0.01, eps_decay=0.995,
 		seed=0, print_info=False
 	):
+		# initialise environment
 		self.env_name = name
 		env = gym.make(name)
-		
 		env.seed(seed)
 		self.env = env
-		self.agent = None
 		
+		# track scores
 		self.scores = []
 		self.scores_window = deque(maxlen=100)
-		self.eps = eps_start
 		
+		# exploration - exploitation
+		self.eps = eps_start
 		self.max_ts = max_ts
 		self.eps_min = eps_min
 		self.eps_decay = eps_decay
 		
+		# debug
 		self.print_info = print_info
 		
 		self.done = False
@@ -60,11 +62,13 @@ class EnvironmentWrapper(object):
 			self.monitor_progress(i_episode)
 		print("==== Training complete! =====")
 		print(f"# Episodes: {n_episodes} || score: {np.mean(self.scores_window)}")
+		
 			
 	def monitor_progress(self, episode):
 		print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)), end="")
 		if not episode % 100:
 			print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
+			print(f"Loss: {self.agent.loss}\n==================================\n")
 		if (not episode % self.save_every) or episode == self.n_episodes:
 			print('\nSaving agent @ {:d} episodes!\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
 			filename = f'{self.env_name}-{episode}.pth'
@@ -121,7 +125,7 @@ class EnvironmentWrapper(object):
 			print("Model Loaded!")
 		
 		
-	def play(self, n_episodes=10, max_ts=200, trained=True):
+	def play(self, num_episodes=10, max_ts=200, trained=True, plot=True):
 		if not self.agent:
 			raise AgentMissing()
 		for i in range(1,num_episodes+1):

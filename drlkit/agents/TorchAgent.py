@@ -14,7 +14,7 @@ from drlkit.utils.memory import Memory
 from drlkit.utils import preprocess as pr
 from drlkit.networks.pytorch.DQN import DQN
 
-
+# DQN, Dueling QN, Policy gradient, Actor critic
 
 # Check if GPU is available
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -23,7 +23,7 @@ class TorchAgent(object):
 	def __init__(
 		self, state_size, action_size, seed=0,
 		buffer_size = 1_000_000, batch_size=64, gamma=0.99,
-		tau=1e-3, lr=5e-4, update_every=4
+		tau=1e-3, lr=5e-4, update_every=4, network="dqn"
 	):
 		"""
 		Initialize a Torch Agent object.
@@ -66,6 +66,7 @@ class TorchAgent(object):
 		self.memory = Memory(action_size, seed, buffer_size, batch_size)
 		
 		self.time_step = 0
+		self.loss = 0
 		
 		
 	def step(self, state, action, reward, next_state, done):
@@ -131,6 +132,8 @@ class TorchAgent(object):
 		loss = (sqrt[target_network^2 - policy_network^2])
 		"""
 		loss = F.mse_loss(Q_expected, Q_target)
+		self.loss = loss
+		
 		
 		# Minimize loss
 		self.optimizer.zero_grad() # Clear gradients
