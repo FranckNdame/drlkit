@@ -64,16 +64,17 @@ class EnvironmentWrapper(object):
 		print(f"# Episodes: {n_episodes} || score: {np.mean(self.scores_window)}")
 		
 			
-	def monitor_progress(self, episode):
+	def monitor_progress(self, episode, training=True):
 		print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)), end="")
 		if not episode % 100:
 			print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
 			print(f"Loss: {self.agent.loss}\n==================================\n")
-		if (not episode % self.save_every) or episode == self.n_episodes:
-			print('\nSaving agent @ {:d} episodes!\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
-			filename = f'{self.env_name}-{episode}.pth'
-			self.best_score = np.mean(self.scores_window)
-			self.save_model(filename, self.agent.target_network.state_dict())
+		if training:
+			if (not episode % self.save_every) or episode == self.n_episodes:
+				print('\nSaving agent @ {:d} episodes!\tAverage Score: {:.2f}'.format(episode, np.mean(self.scores_window)))
+				filename = f'{self.env_name}-{episode}.pth'
+				self.best_score = np.mean(self.scores_window)
+				self.save_model(filename, self.agent.target_network.state_dict())
 			
 		
 				
@@ -130,11 +131,17 @@ class EnvironmentWrapper(object):
 			raise AgentMissing()
 		for i in range(1,num_episodes+1):
 			state = self.env.reset()
+			score = 0
 			for ts in range(max_ts):
 				action = self.agent.act(state) if trained else self.env.action_space.sample()
 				self.env.render()
 				state, reward, done, _ = self.env.step(action)
+				score += reward
+				
 				if done:
 					break 
+			self.scores_window.append(score) # push recent score
+			self.scores.append(score) # save recent score
+			self.monitor_progress(i, False)
 					
 		self.env.close()

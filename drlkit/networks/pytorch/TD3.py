@@ -83,9 +83,7 @@ class Critic(nn.Module):
 		x2 = F.relu(self.layer_5(xu))
 		x2 = self.layer_6(xu)
 		return x2
-		
-		
-		
+			
 	
 		
 		
